@@ -22,6 +22,9 @@ import {
   Pause
 } from "lucide-react";
 import logoJustice from "@/assets/logo-justice.jpg";
+import sampleContract from "@/assets/sample-contract.jpg";
+import analysisDashboard from "@/assets/analysis-dashboard.jpg";
+import finalReport from "@/assets/final-report.jpg";
 
 const Demo = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -29,51 +32,71 @@ const Demo = () => {
 
   const demoSteps = [
     {
-      title: "Upload Your Contract",
-      description: "Start by uploading any contract document - PDFs, Word docs, or text files work perfectly.",
+      title: "Sample Contract Document",
+      description: "This demo analyzes a sample freelance web development contract to show you how our AI works.",
       content: (
-        <Card className="p-8 border-2 border-dashed border-primary/30 bg-gradient-card">
-          <div className="text-center">
+        <Card className="p-6 bg-gradient-card">
+          <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-              <Upload className="w-8 h-8 text-primary" />
+              <FileText className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">Drop your contract here</h3>
-            <p className="text-muted-foreground mb-4">Sample: "Service Agreement - Freelance Web Development.pdf"</p>
-            <Button variant="outline" disabled>
-              <FileText className="w-4 h-4 mr-2" />
-              Choose File
-            </Button>
+            <h3 className="text-lg font-semibold mb-2">Service Agreement - Freelance Web Development.pdf</h3>
+            <p className="text-muted-foreground mb-4">Sample contract document for demonstration</p>
+          </div>
+          <div className="relative overflow-hidden rounded-lg border shadow-sm">
+            <img 
+              src={sampleContract} 
+              alt="Sample contract document" 
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-4 right-4">
+              <Badge className="bg-legal-safe text-white">
+                <CheckCircle className="w-3 h-3 mr-1" />
+                Document Loaded
+              </Badge>
+            </div>
           </div>
         </Card>
       )
     },
     {
-      title: "AI Analysis Begins",
+      title: "AI Analysis in Progress",
       description: "Our advanced AI scans every clause, identifies patterns, and evaluates risks in real-time.",
       content: (
-        <Card className="p-8 bg-gradient-card">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-              <Clock className="w-8 h-8 text-primary animate-spin" />
+        <div className="space-y-6">
+          <Card className="p-6 bg-gradient-card">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+                <Search className="w-8 h-8 text-primary animate-pulse" />
+              </div>
+              <h3 className="text-lg font-semibold mb-4">AI Analysis Dashboard</h3>
+              <Progress value={75} className="mb-4" />
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center justify-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-legal-safe" />
+                  <span>Scanning 47 clauses</span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-legal-safe" />
+                  <span>Identifying risk patterns</span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <Clock className="w-4 h-4 text-primary animate-pulse" />
+                  <span>Generating recommendations</span>
+                </div>
+              </div>
             </div>
-            <h3 className="text-lg font-semibold mb-4">Analyzing your contract...</h3>
-            <Progress value={75} className="mb-4" />
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-center justify-center gap-2">
-                <CheckCircle className="w-4 h-4 text-legal-safe" />
-                <span>Scanning 47 clauses</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <CheckCircle className="w-4 h-4 text-legal-safe" />
-                <span>Identifying risk patterns</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <Search className="w-4 h-4 text-primary animate-pulse" />
-                <span>Generating recommendations</span>
-              </div>
+            <div className="relative overflow-hidden rounded-lg border shadow-sm">
+              <img 
+                src={analysisDashboard} 
+                alt="AI analysis dashboard showing contract analysis" 
+                className="w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent pointer-events-none" />
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       )
     },
     {
@@ -198,38 +221,48 @@ const Demo = () => {
       title: "Final Report & Export",
       description: "Download your complete analysis report with all recommendations and redlined contract.",
       content: (
-        <Card className="p-8 bg-gradient-card text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-legal-safe/10 rounded-full mb-4">
-            <CheckCircle className="w-8 h-8 text-legal-safe" />
-          </div>
-          <h3 className="text-xl font-semibold mb-4">Analysis Complete!</h3>
-          <p className="text-muted-foreground mb-6">
-            Your comprehensive contract analysis is ready with 12 recommendations 
-            and 3 high-priority risk alerts.
-          </p>
+        <div className="space-y-6">
+          <Card className="p-6 bg-gradient-card text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-legal-safe/10 rounded-full mb-4">
+              <CheckCircle className="w-8 h-8 text-legal-safe" />
+            </div>
+            <h3 className="text-xl font-semibold mb-4">Analysis Complete!</h3>
+            <p className="text-muted-foreground mb-6">
+              Your comprehensive contract analysis is ready with 12 recommendations 
+              and 3 high-priority risk alerts.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="p-4 bg-muted/50 rounded-lg">
+                <div className="text-2xl font-bold text-primary mb-1">Medium</div>
+                <div className="text-sm text-muted-foreground">Overall Risk</div>
+              </div>
+              <div className="p-4 bg-muted/50 rounded-lg">
+                <div className="text-2xl font-bold text-primary mb-1">$25k</div>
+                <div className="text-sm text-muted-foreground">Potential Savings</div>
+              </div>
+            </div>
+          </Card>
           
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-primary mb-1">Medium</div>
-              <div className="text-sm text-muted-foreground">Overall Risk</div>
-            </div>
-            <div className="p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-primary mb-1">$25k</div>
-              <div className="text-sm text-muted-foreground">Potential Savings</div>
+          <div className="relative overflow-hidden rounded-lg border shadow-sm">
+            <img 
+              src={finalReport} 
+              alt="Final contract analysis report" 
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-4 right-4 flex gap-3">
+              <Button className="flex-1" disabled>
+                <Download className="w-4 h-4 mr-2" />
+                Download Report
+              </Button>
+              <Button variant="outline" className="flex-1" disabled>
+                <FileText className="w-4 h-4 mr-2" />
+                Export Contract
+              </Button>
             </div>
           </div>
-
-          <div className="space-y-3">
-            <Button className="w-full" disabled>
-              <Download className="w-4 h-4 mr-2" />
-              Download Full Report
-            </Button>
-            <Button variant="outline" className="w-full" disabled>
-              <FileText className="w-4 h-4 mr-2" />
-              Export Redlined Contract
-            </Button>
-          </div>
-        </Card>
+        </div>
       )
     }
   ];
