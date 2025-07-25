@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, FileText, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ContractUploadProps {
   onFileUploaded: (analysis: ContractAnalysis) => void;
@@ -31,76 +33,17 @@ export const ContractUpload = ({ onFileUploaded, industryType }: ContractUploadP
   const [isDragging, setIsDragging] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const simulateContractAnalysis = useCallback((fileName: string): ContractAnalysis => {
-    // Simulate AI analysis based on file name and industry
-    const analysisExamples = {
-      "service-agreement": {
-        overallRisk: "medium" as const,
-        riskyClauses: [
-          {
-            type: "Indemnification",
-            description: "Broad indemnification clause that may expose you to unlimited liability",
-            risk: "high" as const,
-            suggestion: "Add mutual indemnification and cap liability to contract value"
-          },
-          {
-            type: "Termination",
-            description: "Client can terminate without cause with only 30 days notice",
-            risk: "medium" as const,
-            suggestion: "Negotiate for 60-90 days notice and payment for work in progress"
-          },
-          {
-            type: "Intellectual Property",
-            description: "All work product automatically belongs to client",
-            risk: "medium" as const,
-            suggestion: "Retain rights to general methodologies and pre-existing IP"
-          }
-        ],
-        plainEnglishSummary: "This is a standard service agreement where you'll provide consulting services in exchange for payment. The client can end the contract with 30 days notice, and you're responsible for any problems that arise from your work. You'll be paid monthly, but the client owns all the work you create.",
-        negotiationPoints: [
-          {
-            clause: "Payment Terms",
-            currentText: "Payment due within 30 days of invoice",
-            suggestedText: "Payment due within 15 days of invoice with 1.5% monthly late fee",
-            reasoning: "Faster payment improves cash flow and late fees encourage timely payment"
-          },
-          {
-            clause: "Scope Changes",
-            currentText: "Client may request changes to scope as needed",
-            suggestedText: "Scope changes require written approval and additional compensation at agreed hourly rate",
-            reasoning: "Prevents scope creep and ensures you're compensated for additional work"
-          }
-        ]
-      },
-      "nda": {
-        overallRisk: "low" as const,
-        riskyClauses: [
-          {
-            type: "Definition of Confidential Information",
-            description: "Very broad definition that could include publicly available information",
-            risk: "medium" as const,
-            suggestion: "Add exceptions for publicly available information and independently developed ideas"
-          }
-        ],
-        plainEnglishSummary: "This is a standard non-disclosure agreement that prevents you from sharing the client's confidential information. It's mutual, meaning both parties are bound by confidentiality. The agreement lasts for 3 years.",
-        negotiationPoints: [
-          {
-            clause: "Duration",
-            currentText: "This agreement shall remain in effect for 5 years",
-            suggestedText: "This agreement shall remain in effect for 2-3 years",
-            reasoning: "Shorter duration reduces long-term obligations while still protecting legitimate interests"
-          }
-        ]
-      }
-    };
-
-    const fileType = fileName.toLowerCase().includes('nda') ? 'nda' : 'service-agreement';
-    return {
-      fileName,
-      ...analysisExamples[fileType]
-    };
-  }, []);
+  // Function to read file content as text
+  const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  };
 
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.includes('pdf') && !file.type.includes('document') && !file.type.includes('text')) {
@@ -112,20 +55,51 @@ export const ContractUpload = ({ onFileUploaded, industryType }: ContractUploadP
       return;
     }
 
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to analyze contracts",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsAnalyzing(true);
     
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    const analysis = simulateContractAnalysis(file.name);
-    onFileUploaded(analysis);
-    setIsAnalyzing(false);
-    
-    toast({
-      title: "Analysis complete",
-      description: `Contract analysis finished for ${file.name}`,
-    });
-  }, [onFileUploaded, simulateContractAnalysis, toast]);
+    try {
+      // Read file content
+      const contractText = await readFileAsText(file);
+      
+      // Call our edge function for AI analysis
+      const { data, error } = await supabase.functions.invoke('analyze-contract', {
+        body: {
+          contractText,
+          industryType,
+          fileName: file.name
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      onFileUploaded(data);
+      
+      toast({
+        title: "Analysis complete",
+        description: `Contract analysis finished for ${file.name}`,
+      });
+    } catch (error: any) {
+      console.error('Analysis error:', error);
+      toast({
+        title: "Analysis failed",
+        description: error.message || "Failed to analyze contract. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }, [onFileUploaded, industryType, toast, user, readFileAsText]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
