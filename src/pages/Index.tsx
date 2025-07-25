@@ -17,7 +17,7 @@ import {
   MessageSquare,
   Lightbulb
 } from "lucide-react";
-import heroImage from "@/assets/hero-modern.jpg";
+import heroImage from "@/assets/hero-tech-code.jpg";
 import logoJustice from "@/assets/logo-justice.jpg";
 
 const Index = () => {
