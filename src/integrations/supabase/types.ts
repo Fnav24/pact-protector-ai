@@ -14,7 +14,313 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contract_analyses: {
+        Row: {
+          ai_model_version: string | null
+          analysis_summary: string | null
+          completed_at: string | null
+          contract_id: string | null
+          created_at: string | null
+          id: string
+          legal_issues: Json | null
+          processing_time_ms: number | null
+          recommendations: Json | null
+          risk_score: number | null
+          status: Database["public"]["Enums"]["analysis_status"] | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_model_version?: string | null
+          analysis_summary?: string | null
+          completed_at?: string | null
+          contract_id?: string | null
+          created_at?: string | null
+          id?: string
+          legal_issues?: Json | null
+          processing_time_ms?: number | null
+          recommendations?: Json | null
+          risk_score?: number | null
+          status?: Database["public"]["Enums"]["analysis_status"] | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_model_version?: string | null
+          analysis_summary?: string | null
+          completed_at?: string | null
+          contract_id?: string | null
+          created_at?: string | null
+          id?: string
+          legal_issues?: Json | null
+          processing_time_ms?: number | null
+          recommendations?: Json | null
+          risk_score?: number | null
+          status?: Database["public"]["Enums"]["analysis_status"] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_analyses_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contract_analyses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contract_templates: {
+        Row: {
+          content: Json
+          country_code: string | null
+          created_at: string | null
+          generated_content: string | null
+          id: string
+          template_type: Database["public"]["Enums"]["contract_template_type"]
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: Json
+          country_code?: string | null
+          created_at?: string | null
+          generated_content?: string | null
+          id?: string
+          template_type: Database["public"]["Enums"]["contract_template_type"]
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: Json
+          country_code?: string | null
+          created_at?: string | null
+          generated_content?: string | null
+          id?: string
+          template_type?: Database["public"]["Enums"]["contract_template_type"]
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_templates_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "contract_templates_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contracts: {
+        Row: {
+          content: string
+          country_code: string | null
+          created_at: string | null
+          deleted_at: string | null
+          file_name: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          status: Database["public"]["Enums"]["contract_status"] | null
+          title: string
+          updated_at: string | null
+          uploaded_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          country_code?: string | null
+          created_at?: string | null
+          deleted_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["contract_status"] | null
+          title: string
+          updated_at?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          country_code?: string | null
+          created_at?: string | null
+          deleted_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["contract_status"] | null
+          title?: string
+          updated_at?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "contracts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      countries: {
+        Row: {
+          active: boolean | null
+          code: string
+          created_at: string | null
+          legal_system: string | null
+          name: string
+        }
+        Insert: {
+          active?: boolean | null
+          code: string
+          created_at?: string | null
+          legal_system?: string | null
+          name: string
+        }
+        Update: {
+          active?: boolean | null
+          code?: string
+          created_at?: string | null
+          legal_system?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          country_code: string | null
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          country_code?: string | null
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          country_code?: string | null
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      usage_tracking: {
+        Row: {
+          contract_builds: number | null
+          contract_uploads: number | null
+          created_at: string | null
+          id: string
+          month_year: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          contract_builds?: number | null
+          contract_uploads?: number | null
+          created_at?: string | null
+          id?: string
+          month_year: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          contract_builds?: number | null
+          contract_uploads?: number | null
+          created_at?: string | null
+          id?: string
+          month_year?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_tracking_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_subscriptions: {
+        Row: {
+          created_at: string | null
+          ends_at: string | null
+          id: string
+          is_active: boolean | null
+          plan: Database["public"]["Enums"]["subscription_plan"] | null
+          starts_at: string | null
+          stripe_subscription_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plan?: Database["public"]["Enums"]["subscription_plan"] | null
+          starts_at?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plan?: Database["public"]["Enums"]["subscription_plan"] | null
+          starts_at?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +329,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      analysis_status: "pending" | "processing" | "completed" | "failed"
+      contract_status: "active" | "deleted_by_user" | "archived"
+      contract_template_type:
+        | "will"
+        | "partnership"
+        | "business"
+        | "invoice"
+        | "employment"
+        | "rental"
+        | "nda"
+      subscription_plan: "free" | "premium"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +466,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      analysis_status: ["pending", "processing", "completed", "failed"],
+      contract_status: ["active", "deleted_by_user", "archived"],
+      contract_template_type: [
+        "will",
+        "partnership",
+        "business",
+        "invoice",
+        "employment",
+        "rental",
+        "nda",
+      ],
+      subscription_plan: ["free", "premium"],
+    },
   },
 } as const
