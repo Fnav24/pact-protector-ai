@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import logoJustice from "@/assets/logo-justice.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -60,7 +61,34 @@ const getRiskColor = (risk: string) => {
 
 export const ContractAnalysis = ({ analysis, onNewAnalysis }: ContractAnalysisProps) => {
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      {/* Header with Logo */}
+      <header className="bg-gradient-hero text-white py-6">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 rounded-lg p-1 overflow-hidden backdrop-blur-sm">
+                <img 
+                  src={logoJustice} 
+                  alt="Lady of Justice - ContractGuard AI" 
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <span className="text-xl font-bold">ContractGuard AI</span>
+            </div>
+            <Button 
+              onClick={onNewAnalysis} 
+              variant="outline" 
+              className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+            >
+              New Analysis
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="space-y-6">
       {/* Header */}
       <Card className="p-6 shadow-medium bg-gradient-card">
         <div className="flex items-center justify-between">
@@ -255,6 +283,8 @@ export const ContractAnalysis = ({ analysis, onNewAnalysis }: ContractAnalysisPr
           </Card>
         </TabsContent>
       </Tabs>
+        </div>
+      </div>
     </div>
   );
 };

@@ -18,6 +18,7 @@ import {
   Lightbulb
 } from "lucide-react";
 import heroImage from "@/assets/hero-modern.jpg";
+import logoJustice from "@/assets/logo-justice.jpg";
 
 const Index = () => {
   const [selectedIndustry, setSelectedIndustry] = useState("freelancer");
@@ -306,8 +307,12 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center text-center">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Scale className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 bg-primary/10 rounded-lg p-1 overflow-hidden">
+                <img 
+                  src={logoJustice} 
+                  alt="Lady of Justice - ContractGuard AI" 
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
               <span className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 ContractGuard AI
