@@ -17,6 +17,7 @@ import {
   MessageSquare,
   Lightbulb
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-tech-code.jpg";
 import logoJustice from "@/assets/logo-justice.jpg";
 
@@ -109,8 +110,9 @@ const Index = () => {
               size="lg" 
               variant="outline"
               className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur-sm"
+              asChild
             >
-              Watch Demo
+              <Link to="/demo">Watch Demo</Link>
             </Button>
           </div>
         </div>
