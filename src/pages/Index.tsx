@@ -150,18 +150,18 @@ const Index = () => {
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 px-8 py-4 text-lg font-semibold shadow-glow"
-              onClick={handleStartAnalysis}
+              onClick={() => window.location.href = user ? '/dashboard' : '/auth'}
             >
-              Try Free Analysis
+              {user ? 'View Dashboard' : 'Get Started'}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
             <Button 
               size="lg" 
               variant="outline"
               className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur-sm"
-              asChild
+              onClick={() => window.location.href = '/demo'}
             >
-              <Link to="/demo">Watch Demo</Link>
+              Try Demo
             </Button>
           </div>
         </div>
