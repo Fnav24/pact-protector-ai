@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ContractUpload, ContractAnalysis as ContractAnalysisType } from "@/components/ContractUpload";
 import { ContractAnalysis } from "@/components/ContractAnalysis";
 import { IndustrySelector } from "@/components/IndustrySelector";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   Scale, 
   Shield, 
@@ -24,9 +26,20 @@ import logoJustice from "@/assets/logo-justice.jpg";
 const Index = () => {
   const [selectedIndustry, setSelectedIndustry] = useState("freelancer");
   const [analysis, setAnalysis] = useState<ContractAnalysisType | null>(null);
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleFileUploaded = (contractAnalysis: ContractAnalysisType) => {
     setAnalysis(contractAnalysis);
+  };
+
+  const handleStartAnalysis = () => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    // Scroll to upload section if authenticated
+    document.querySelector("#upload-section")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleNewAnalysis = () => {
@@ -48,6 +61,41 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Scale className="h-8 w-8 text-white" />
+              <span className="text-xl font-bold text-white">LegalAI</span>
+            </div>
+            <div className="flex items-center gap-4">
+              {loading ? (
+                <div className="w-20 h-9 bg-white/20 rounded animate-pulse" />
+              ) : user ? (
+                <div className="flex items-center gap-4">
+                  <span className="text-white/80 text-sm">Welcome, {user.email}</span>
+                  <Button 
+                    variant="outline" 
+                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+                    onClick={signOut}
+                  >
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  className="bg-white text-primary hover:bg-white/90"
+                  asChild
+                >
+                  <Link to="/auth">Sign In</Link>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-screen flex items-center">
         <div className="absolute inset-0 bg-gradient-hero">
@@ -102,6 +150,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 px-8 py-4 text-lg font-semibold shadow-glow"
+              onClick={handleStartAnalysis}
             >
               Try Free Analysis
               <ArrowRight className="w-5 h-5 ml-2" />
@@ -248,7 +297,7 @@ const Index = () => {
       </section>
 
       {/* Upload Section */}
-      <section className="py-24 bg-gradient-to-br from-muted/50 to-background relative">
+      <section id="upload-section" className="py-24 bg-gradient-to-br from-muted/50 to-background relative">
         <div className="absolute inset-0 bg-gradient-accent opacity-50"></div>
         <div className="relative container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-12">
@@ -293,6 +342,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 px-8 py-4 text-lg font-semibold shadow-glow"
+              onClick={handleStartAnalysis}
             >
               Start Free Analysis
               <ArrowRight className="w-5 h-5 ml-2" />
